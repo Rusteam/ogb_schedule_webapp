@@ -17,9 +17,12 @@ body {
   align-items: stretch;
   flex-direction: row;
   flex-wrap: wrap;
-  height: 6em;
 }
 
 .btn-space {
   margin: 2%;
+}
+
+.cnt-text {
+  text-align: center;
 }
