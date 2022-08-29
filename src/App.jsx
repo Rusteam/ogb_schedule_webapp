@@ -3,7 +3,8 @@ import './App.css'
 import {countries, languages} from "countries-list";
 import {getTimeZones} from "@vvo/tzdb";
 
-const WEBHOOK_URL = "https://app.botmother.com/api/bot/action/Q7diqBbn6/CXCtDuDiYXDWCnDwCxBaDd8XB3BTDkd8B0CaBovDAChBbBdB5C0BuDKIXC3D5CAB";
+// const WEBHOOK_URL = "https://app.botmother.com/api/bot/action/Q7diqBbn6/CXCtDuDiYXDWCnDwCxBaDd8XB3BTDkd8B0CaBovDAChBbBdB5C0BuDKIXC3D5CAB";
+const WEBHOOK_URL = "http://localhost:8080"
 const DAYS_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 const TIME_LIST = [
     "7:00", "7:30", "8:00", "8:30",
@@ -29,7 +30,7 @@ function extractValues(data) {
 }
 
 async function fetchGeolocation() {
-    return fetch("http://ip-api.com/json")
+    return await fetch("http://ip-api.com/json")
           .then(resp => resp.json())
           .catch(error => console.log(error));
     }
@@ -233,7 +234,7 @@ function filterTimeZones(countryCode) {
 function App() {
 
   const tg = window.Telegram.WebApp;
-  const user = tg.initDataUnsafe.user;
+  const user = tg.initDataUnsafe.user ?? {"language_code": "en", "id": 1234134, "first_name": "Rustem"};
   tg.expand();
 
   // set hooks
@@ -258,20 +259,21 @@ function App() {
       lang_code: lang_code
     };
 
+    const payload =  {
+          platform: "tg",
+          users: [user.id.toString()],
+          data
+      }
     const resp = await fetch(WEBHOOK_URL, {
       method: "POST",
       mode: "no-cors",
-      headers: {
-        "content-type": "application/json; charset=UTF-8"
-      },
-      body: {
-        data: data,
-        platform: "tg",
-        users: [user.id.toString()]
-      }
+      headers: new Headers({'Content-Type': 'application/json'}),
+        credentials: "omit",
+      body: JSON.stringify(payload)
     })
 
       console.log(resp);
+    console.log({payload})
 
     tg.close()
   }
@@ -322,6 +324,7 @@ function App() {
           updateSelected={setLang}
           selected={lang}
         ></DropdownSelect>
+           <button className="btn btn-lg btn-success" onClick={submitData}>Continue</button>
       </div>
     </div>
   )
