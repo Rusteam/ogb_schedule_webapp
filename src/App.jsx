@@ -3,9 +3,9 @@ import "./App.css";
 import { countries, languages } from "countries-list";
 import { getTimeZones } from "@vvo/tzdb";
 
-// const WEBHOOK_URL = "https://app.botmother.com/api/bot/action/Q7diqBbn6/CXCtDuDiYXDWCnDwCxBaDd8XB3BTDkd8B0CaBovDAChBbBdB5C0BuDKIXC3D5CAB";
-const WEBHOOK_URL = "http://localhost:8080";
-// const WEBHOOK_URL = "https://reqbin.com/echo/post/json";
+const WEBHOOK_URL =
+	"https://app.botmother.com/api/bot/action/Q7diqBbn6/CXCtDuDiYXDWCnDwCxBaDd8XB3BTDkd8B0CaBovDAChBbBdB5C0BuDKIXC3D5CAB";
+// const WEBHOOK_URL = "http://localhost:8080";
 const DAYS_OF_WEEK = [
 	"Monday",
 	"Tuesday",
@@ -108,7 +108,9 @@ function DayOfWeek(props) {
 		props.updateSelected(val);
 	};
 
-	let name =props.name.substring(0, 1).toUpperCase() + props.name.substring(1, 2).toLowerCase();
+	let name =
+		props.name.substring(0, 1).toUpperCase() +
+		props.name.substring(1, 2).toLowerCase();
 
 	return (
 		<div id={`week-${props.name}`}>
@@ -316,19 +318,26 @@ function App() {
 			users: [user.id.toString()],
 			data,
 		});
+		console.log({ payload });
+
+		let headersList = {
+			Accept: "*/*",
+			mode: "no-cors",
+			"cache-control": "no-cache",
+			"Content-Type": "application/json",
+		};
+
 		const resp = await fetch(WEBHOOK_URL, {
 			method: "POST",
-			// mode: "no-cors",
-			headers: { "Content-Type": "application/json" },
-			// credentials: "omit",
+			mode: "no-cors",
+			headers: headersList,
 			body: payload,
 		});
 
-		const response = await resp.json();
-		console.log(response.status);
+		const json = await resp.text();
+		console.log(json);
 
-		console.log({ response });
-		console.log({ payload });
+		console.error(e);
 
 		tg.close();
 	};
