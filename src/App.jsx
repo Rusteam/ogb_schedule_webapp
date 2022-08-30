@@ -240,10 +240,21 @@ function App() {
   // set hooks
   const timeList = genListHooks(TIME_LIST);
   const dayList = genListHooks(DAYS_OF_WEEK);
-  const [country, setCountry] = useState(GEO.country ? GEO.country : null);
-  const [timeZone, setTimeZone] = useState(GEO.timezone ? GEO.timezone : null);
-  const [lang, setLang] = useState(user?.language_code ? languages[user.language_code][LANG_DISPLAY] : null);
+	const [country, setCountry] = useState("");
+	const [timeZone, setTimeZone] = useState("");
+	const [lang, setLang] = useState("");
 
+	const handleGeoChange = async () => {
+		const GEO = await fetchGeolocation();
+		setCountry(GEO.country ? GEO.country : null);
+		setTimeZone(GEO.timezone ? GEO.timezone : null);
+		setLang(
+			user?.language_code ? languages[user.language_code][LANG_DISPLAY] : null
+		);
+	};
+	useEffect(() => {
+		handleGeoChange();
+	}, []);
 
   const submitData = async () => {
     console.log("submit clicked");
