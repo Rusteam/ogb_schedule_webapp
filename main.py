@@ -3,9 +3,9 @@ import os
 from telebot import types
 import telebot
 
-bot = telebot.TeleBot(os.getenv("TELEGRAM_BOT_TOKEN", input("enter telegram token: ")))
-codepen_link = os.getenv("OGB_CODEPEN_LINK", input("enter codepen link: "))
-ngrok_link = os.getenv("OGB_NGROK_LINK", input("enter ngrok link: "))
+bot = telebot.TeleBot(os.environ.get("TELEGRAM_BOT_TOKEN", input("enter telegram token: ")))
+codepen_link = os.environ.get("OGB_CODEPEN_LINK", input("enter codepen link: "))
+ngrok_link = os.environ.get("OGB_NGROK_LINK", input("enter ngrok link: "))
 
 
 def inline_keyboard():  # создание клавиатуры с webapp кнопкой

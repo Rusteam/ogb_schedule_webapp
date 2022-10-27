@@ -3,9 +3,7 @@ import "./App.css";
 import { countries, languages } from "countries-list";
 import { getTimeZones } from "@vvo/tzdb";
 
-const WEBHOOK_URL =
-	"https://app.botmother.com/api/bot/action/Q7diqBbn6/CXCtDuDiYXDWCnDwCxBaDd8XB3BTDkd8B0CaBovDAChBbBdB5C0BuDKIXC3D5CAB";
-// const WEBHOOK_URL = "http://localhost:8080";
+const WEBHOOK_URL = "https://functions.yandexcloud.net/d4ecji0mcnh76oq29hs3";
 const DAYS_OF_WEEK = [
 	"Monday",
 	"Tuesday",
@@ -94,6 +92,7 @@ function findByName(array, key, value) {
 	const filtered = array.filter((x) => {
 		return x[key] === value;
 	});
+	console.log(filtered);
 	return filtered.length > 0 ? filtered[0] : null;
 }
 
@@ -254,12 +253,42 @@ function DropdownSelect(props) {
 	);
 }
 
-function toObject(total, curVal) {
+const MainDuplicate = (props) => {
+	if (props.user.first_name !== "John Doe") {
+		return <></>;
+	} else {
+		return (
+			<button className="btn btn-lg btn-success btn-wide" onClick={props.submitData}>
+				Submit
+			</button>
+		)
+	}
+};
+
+function toDaysObject(total, curVal) {
 	let [name, isSelected] = curVal;
-	return {
-		[name]: isSelected,
-		...total,
-	};
+	if (isSelected) {
+		name = name.toLowerCase().substring(0, 3);
+		return {
+			[name]: "V",
+			...total,
+		};
+	} else {
+		return total
+	}
+}
+
+function toTimeObject(total, curVal) {
+	let [name, isSelected] = curVal;
+	if (isSelected) {
+		let key = name.replace(":", "");
+		return {
+			[key]: name,
+			...total,
+		};
+	} else {
+		return total
+	}
 }
 
 function filterTimeZones(countryCode) {
@@ -273,8 +302,8 @@ function App() {
 	const tg = window.Telegram.WebApp;
 	const user = tg.initDataUnsafe.user ?? {
 		language_code: "en",
-		id: 1234134,
-		first_name: "Rustem",
+		id: "all",
+		first_name: "John Doe",
 	};
 	tg.expand();
 
@@ -299,18 +328,20 @@ function App() {
 
 	const submitData = async () => {
 		console.log("submit clicked");
-		let selectedDays = dayList.reduce(toObject, {});
-		let selectedTime = timeList.reduce(toObject, {});
+		let selectedDays = dayList.reduce(toDaysObject, {});
+		let selectedTime = timeList.reduce(toTimeObject, {});
+		console.log(timeZone);
 		let timeOffset = timeZone
 			? findByName(TIME_ZONES, "name", timeZone)?.rawOffsetInMinutes / 60
 			: null;
-		let lang_code = lang ? findByName(LANGS, LANG_DISPLAY, lang)?.code : null;
+		timeOffset = timeOffset >= 0 ? `+${timeOffset}` : timeOffset.toString();
+		let langCode = lang ? findByName(LANGS, LANG_DISPLAY, lang)?.code : null;
 		let data = {
-			time: selectedTime,
-			days: selectedDays,
 			country: country,
-			time_offset: timeOffset,
-			lang_code: lang_code,
+			timezone: timeOffset,
+			language: langCode,
+			...selectedDays,
+			...selectedTime,
 		};
 
 		const payload = JSON.stringify({
@@ -320,24 +351,16 @@ function App() {
 		});
 		console.log({ payload });
 
-		let headersList = {
-			Accept: "*/*",
-			mode: "no-cors",
-			"cache-control": "no-cache",
-			"Content-Type": "application/json",
-		};
-
 		const resp = await fetch(WEBHOOK_URL, {
 			method: "POST",
-			mode: "no-cors",
-			headers: headersList,
 			body: payload,
+			headers: {
+				"Content-type": "application/json"
+			}
 		});
 
 		const json = await resp.text();
 		console.log(json);
-
-		console.error(e);
 
 		tg.close();
 	};
@@ -384,9 +407,10 @@ function App() {
 					updateSelected={setLang}
 					selected={lang}
 				></DropdownSelect>
-				<button className="btn btn-lg btn-success" onClick={submitData}>
-					Continue
-				</button>
+				<MainDuplicate
+					user={user}
+					submitData={submitData}
+				></MainDuplicate>
 			</div>
 		</div>
 	);
