@@ -115,10 +115,12 @@ export const MainDuplicate = (props) => {
 	if (props.user.first_name !== "John Doe") {
 		return <></>;
 	} else {
+		let activeClassName = props.active ? "btn-active" : "btn-disabled"
 		return (
-			<button className="btn btn-lg btn-success btn-wide" onClick={props.submitData}>
-				Submit
-			</button>
+			<button
+				className={`btn btn-lg btn-success btn-wide ${activeClassName}`}
+				onClick={props.submitData}
+			>Submit</button>
 		)
 	}
 };

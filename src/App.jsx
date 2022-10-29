@@ -27,6 +27,7 @@ function App() {
 	const [country, setCountry] = useState("");
 	const [timeZone, setTimeZone] = useState("");
 	const [lang, setLang] = useState("");
+	let zones = filterTimeZones(country);
 
 	const handleGeoChange = async () => {
 		const GEO = await fetchGeolocation();
@@ -36,16 +37,25 @@ function App() {
 			user?.language_code ? languages[user.language_code][LANG_DISPLAY] : null
 		);
 	};
+
 	useEffect(() => {
 		handleGeoChange();
 	}, []);
 
+	useEffect(() => {
+		if (country) {
+			zones = filterTimeZones(country);
+			setTimeZone(zones[0].name);
+		}
+	}, [country]);
+
 	const submitData = async () => {
 		console.log("submit clicked");
 		let selectedDays = dayList.reduce(toDaysObject, {});
+
 		let selectedTime = timeList.reduce(toTimeObject, {});
 		let timeOffset = timeZone
-			? findByName(TIME_ZONES, "name", timeZone)?.rawOffsetInMinutes / 60
+			? Math.round(findByName(TIME_ZONES, "name", timeZone)?.rawOffsetInMinutes / 60)
 			: null;
 		timeOffset = timeOffset >= 0 ? `+${timeOffset}` : timeOffset.toString();
 		let langCode = lang ? findByName(LANGS, LANG_DISPLAY, lang)?.code : null;
@@ -72,20 +82,24 @@ function App() {
 			}
 		});
 
-		const json = await resp.text();
-		console.log(json);
-
 		tg.close();
+
+		const json = await resp.text();
+
+		console.log(json);
 	};
 
 	tg.MainButton.onClick(submitData);
 	tg.MainButton.setText("Submit");
 	tg.MainButton.show();
 
+	let mainActive;
 	if (timeList.reduce(sumListHooks, 0) > 0 && dayList.reduce(sumListHooks, 0)) {
 		tg.MainButton.enable();
+		mainActive = true;
 	} else {
 		tg.MainButton.disable();
+		mainActive = false;
 	}
 
 	return (
@@ -108,7 +122,7 @@ function App() {
 				></DropdownSelect>
 				<DropdownSelect
 					name="time zone"
-					values={filterTimeZones(country)}
+					values={zones}
 					displayKey="name"
 					updateSelected={setTimeZone}
 					selected={timeZone}
@@ -123,6 +137,7 @@ function App() {
 				<MainDuplicate
 					user={user}
 					submitData={submitData}
+					active={mainActive}
 				></MainDuplicate>
 			</div>
 		</div>

@@ -8,8 +8,10 @@ include .env
 s3: build
 	aws --endpoint-url=${AWS_ENDPOINT_URL} \
 		--profile ${AWS_PROFILE} \
-		--exclude ".DS_Store" \
-	    s3 cp --recursive dist/ s3://${AWS_BUCKET_NAME}
+	    s3 cp \
+	    --recursive dist/ \
+	    s3://${AWS_BUCKET_NAME} \
+		--exclude ".DS_Store"
 
 run: dev
 	npm run dev

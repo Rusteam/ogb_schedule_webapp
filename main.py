@@ -2,23 +2,26 @@ import os
 
 from telebot import types
 import telebot
+import dotenv
 
+
+dotenv.load_dotenv(".env")
 bot = telebot.TeleBot(os.environ.get("TELEGRAM_BOT_TOKEN", input("enter telegram token: ")))
-codepen_link = os.environ.get("OGB_CODEPEN_LINK", input("enter codepen link: "))
-ngrok_link = os.environ.get("OGB_NGROK_LINK", input("enter ngrok link: "))
+prod_link = os.environ.get("OGB_PROD_LINK", input("enter prod link: "))
+dev_link = os.environ.get("OGB_DEV_LINK", input("enter dev link: "))
 
 
 def inline_keyboard():  # создание клавиатуры с webapp кнопкой
     keyboard = types.InlineKeyboardMarkup()  # создаем клавиатуру
-    webAppTest = types.WebAppInfo(codepen_link)
+    webAppTest = types.WebAppInfo(prod_link)
     webAppGame = types.WebAppInfo(
-        ngrok_link
+        dev_link
     )  # создаем webappinfo - формат хранения url
     one_butt = types.InlineKeyboardButton(
-        text="Codepen", web_app=webAppTest
+        text="Production", web_app=webAppTest
     )  # создаем кнопку типа webapp
     two_butt = types.InlineKeyboardButton(
-        text="Localhost", web_app=webAppGame
+        text="Development", web_app=webAppGame
     )  # создаем кнопку типа 10webapp
     keyboard.add(
         one_butt,
@@ -30,15 +33,13 @@ def inline_keyboard():  # создание клавиатуры с webapp кно
 
 def keyboard():  # создание клавиатуры с webapp кнопкой
     keyboard = types.ReplyKeyboardMarkup(row_width=1)  # создаем клавиатуру
-    webAppTest = types.WebAppInfo(codepen_link)
-    webAppGame = types.WebAppInfo(
-        ngrok_link
-    )  # создаем webappinfo - формат хранения url
+    webAppTest = types.WebAppInfo(prod_link)
+    webAppGame = types.WebAppInfo(dev_link)
     one_butt = types.KeyboardButton(
-        text="Codepen", web_app=webAppTest
+        text="Production", web_app=webAppTest
     )  # создаем кнопку типа webapp
     two_butt = types.KeyboardButton(
-        text="Localhost", web_app=webAppGame
+        text="Development", web_app=webAppGame
     )  # создаем кнопку типа 10webapp
     keyboard.add(
         one_butt,
