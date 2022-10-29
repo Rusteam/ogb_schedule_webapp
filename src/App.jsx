@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import "./App.css";
-import { countries, languages } from "countries-list";
-import { getTimeZones } from "@vvo/tzdb";
+import {countries, languages} from "countries-list";
+import {getTimeZones} from "@vvo/tzdb";
 
 const WEBHOOK_URL = "https://functions.yandexcloud.net/d4ecji0mcnh76oq29hs3";
 const DAYS_OF_WEEK = [
