@@ -57,7 +57,7 @@ function App() {
 		let timeOffset = timeZone
 			? Math.round(findByName(TIME_ZONES, "name", timeZone)?.rawOffsetInMinutes / 60)
 			: null;
-		timeOffset = timeOffset >= 0 ? `+${timeOffset}` : timeOffset.toString();
+		timeOffset = timeOffset === null ? null : (timeOffset >= 0 ? `+${timeOffset}` : timeOffset.toString());
 		let langCode = lang ? findByName(LANGS, LANG_DISPLAY, lang)?.code : null;
 		let data = {
 			country: country,
