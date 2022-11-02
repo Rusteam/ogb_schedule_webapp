@@ -112,7 +112,7 @@ export function DropdownSelect(props) {
 }
 
 export const MainDuplicate = (props) => {
-	if (props.user.first_name !== "John Doe") {
+	if (props.disabled) {
 		return <></>;
 	} else {
 		let activeClassName = props.active ? "btn-active" : "btn-disabled"

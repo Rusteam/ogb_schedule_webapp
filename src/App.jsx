@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import "./App.css";
 import {languages} from "countries-list";
 import {fetchGeolocation, findByName, genListHooks, sumListHooks, toDaysObject, toTimeObject} from "./utils.jsx";
-import {COUNTRIES, DAYS_OF_WEEK, LANG_DISPLAY, LANGS, TIME_LIST, TIME_ZONES, WEBHOOK_URL} from "./config.jsx";
+import {COUNTRIES, DAYS_OF_WEEK, LANG_DISPLAY, LANGS, TIME_LIST, TIME_ZONES, WEBHOOK_URL, TG_MAIN_BUTTON} from "./config.jsx";
 import {DropdownSelect, MainDuplicate, TimeList, Week} from "./Components.jsx";
 
 function filterTimeZones(countryCode) {
@@ -89,17 +89,14 @@ function App() {
 		console.log(json);
 	};
 
-	tg.MainButton.onClick(submitData);
-	tg.MainButton.setText("Submit");
-	tg.MainButton.show();
-
-	let mainActive;
-	if (timeList.reduce(sumListHooks, 0) > 0 && dayList.reduce(sumListHooks, 0)) {
-		tg.MainButton.enable();
-		mainActive = true;
+	if (TG_MAIN_BUTTON) {
+		// Can't use this at the moment because submitData is called multiple times
+		// with different state
+		tg.MainButton.onClick(submitData);
+		tg.MainButton.setText("Submit");
+		tg.MainButton.show();
 	} else {
-		tg.MainButton.disable();
-		mainActive = false;
+		tg.MainButton.hide();
 	}
 
 	return (
@@ -135,9 +132,9 @@ function App() {
 					selected={lang}
 				></DropdownSelect>
 				<MainDuplicate
-					user={user}
+					disabled={TG_MAIN_BUTTON}
 					submitData={submitData}
-					active={mainActive}
+					active={timeList.reduce(sumListHooks, 0) > 0 && dayList.reduce(sumListHooks, 0) > 0}
 				></MainDuplicate>
 			</div>
 		</div>
