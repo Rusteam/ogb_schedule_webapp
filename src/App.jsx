@@ -2,7 +2,17 @@ import {useEffect, useState} from "react";
 import "./App.css";
 import {languages} from "countries-list";
 import {fetchGeolocation, findByName, genListHooks, sumListHooks, toDaysObject, toTimeObject} from "./utils.jsx";
-import {COUNTRIES, DAYS_OF_WEEK, LANG_DISPLAY, LANGS, TIME_LIST, TIME_ZONES, WEBHOOK_URL, TG_MAIN_BUTTON} from "./config.jsx";
+import {
+	COUNTRIES,
+	DAYS_OF_WEEK,
+	LANG_DISPLAY,
+	LANGS,
+	TIME_LIST,
+	TIME_ZONES,
+	WEBHOOK_URL,
+	TG_MAIN_BUTTON,
+	LANG_ON
+} from "./config.jsx";
 import {DropdownSelect, MainDuplicate, TimeList, Week} from "./Components.jsx";
 
 function filterTimeZones(countryCode) {
@@ -33,9 +43,11 @@ function App() {
 		const GEO = await fetchGeolocation();
 		setCountry(GEO.country ? GEO.country : null);
 		setTimeZone(GEO.timezone ? GEO.timezone : null);
-		setLang(
-			user?.language_code ? languages[user.language_code][LANG_DISPLAY] : null
-		);
+		if (LANG_ON) {
+			setLang(
+				user?.language_code ? languages[user.language_code][LANG_DISPLAY] : null
+			);
+		}
 	};
 
 	useEffect(() => {
@@ -58,14 +70,15 @@ function App() {
 			? Math.round(findByName(TIME_ZONES, "name", timeZone)?.rawOffsetInMinutes / 60)
 			: null;
 		timeOffset = timeOffset === null ? null : (timeOffset >= 0 ? `+${timeOffset}` : timeOffset.toString());
-		let langCode = lang ? findByName(LANGS, LANG_DISPLAY, lang)?.code : null;
 		let data = {
 			country: country,
 			timezone: timeOffset,
-			language: langCode,
 			...selectedDays,
 			...selectedTime,
 		};
+		if (LANG_ON) {
+			data["language"] = lang ? findByName(LANGS, LANG_DISPLAY, lang)?.code : null;
+		}
 
 		const payload = JSON.stringify({
 			platform: "tg",
@@ -124,17 +137,17 @@ function App() {
 					updateSelected={setTimeZone}
 					selected={timeZone}
 				></DropdownSelect>
-				<DropdownSelect
+				{LANG_ON ? <DropdownSelect
 					name="language"
 					values={LANGS}
 					displayKey={LANG_DISPLAY}
 					updateSelected={setLang}
 					selected={lang}
-				></DropdownSelect>
+				></DropdownSelect> : <div></div>}
 				<MainDuplicate
 					disabled={TG_MAIN_BUTTON}
 					submitData={submitData}
-					active={timeList.reduce(sumListHooks, 0) > 0 && dayList.reduce(sumListHooks, 0) > 0}
+					active={true}
 				></MainDuplicate>
 			</div>
 		</div>

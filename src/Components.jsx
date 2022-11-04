@@ -119,8 +119,9 @@ export const MainDuplicate = (props) => {
 		return (
 			<button
 				className={`btn btn-lg btn-success btn-wide ${activeClassName}`}
+				style={{"margin-top": "1vh"}}
 				onClick={props.submitData}
-			>Submit</button>
+			>Save</button>
 		)
 	}
 };
