@@ -48,3 +48,5 @@ export const COUNTRIES = extractValues(countries);
 export const TIME_ZONES = getTimeZones();
 export const LANGS = extractValues(languages);
 export const LANG_DISPLAY = "native";
+export const TG_MAIN_BUTTON = false;
+export const LANG_ON = false;

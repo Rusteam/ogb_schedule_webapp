@@ -1,4 +1,5 @@
 import {useState} from "react";
+import {TIME_ZONES} from "./config.jsx";
 
 export function extractValues(data) {
     let valList = [];
@@ -13,9 +14,23 @@ export function extractValues(data) {
 }
 
 export async function fetchGeolocation() {
-    return await fetch("http://ip-api.com/json")
+    let geo = await fetch("https://geolocation-db.com/json/")
         .then((resp) => resp.json())
         .catch((error) => console.log(error));
+    let timezone;
+    if (geo !== null) {
+        let countryZones = TIME_ZONES.filter((x) => x.countryCode === geo.country_code);
+        if (countryZones.length > 0) {
+            let cityZones = countryZones.filter((x) => x.mainCities.indexOf(geo.city) !== -1 );
+            timezone = cityZones.length > 0 ? cityZones[0].name : countryZones[0].name;
+        } else {
+            timezone = null;
+        }
+        return {
+            "country": geo.country_name,
+            "timezone": timezone
+        }
+    }
 }
 
 export function getDisplayOptions(array, key) {

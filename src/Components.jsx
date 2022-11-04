@@ -112,15 +112,16 @@ export function DropdownSelect(props) {
 }
 
 export const MainDuplicate = (props) => {
-	if (props.user.first_name !== "John Doe") {
+	if (props.disabled) {
 		return <></>;
 	} else {
 		let activeClassName = props.active ? "btn-active" : "btn-disabled"
 		return (
 			<button
 				className={`btn btn-lg btn-success btn-wide ${activeClassName}`}
+				style={{"margin-top": "1vh"}}
 				onClick={props.submitData}
-			>Submit</button>
+			>Save</button>
 		)
 	}
 };
