@@ -13,6 +13,8 @@ export const DAYS_OF_WEEK = [
     "Sunday",
 ];
 export const TIME_LIST = [
+    "6:00",
+    "6:30",
     "7:00",
     "7:30",
     "8:00",
@@ -43,6 +45,9 @@ export const TIME_LIST = [
     "20:30",
     "21:00",
     "21:30",
+    "22:00",
+    "22:30",
+    "23:00",
 ];
 export const COUNTRIES = extractValues(countries);
 export const TIME_ZONES = getTimeZones();
