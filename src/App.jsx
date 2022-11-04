@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import "./App.css";
 import {languages} from "countries-list";
-import {fetchGeolocation, findByName, genListHooks, sumListHooks, toDaysObject, toTimeObject} from "./utils.jsx";
+import {fetchGeolocation, findByName, genListHooks, toDaysObject, toTimeObject} from "./utils.jsx";
 import {
 	COUNTRIES,
 	DAYS_OF_WEEK,
@@ -41,12 +41,14 @@ function App() {
 
 	const handleGeoChange = async () => {
 		const GEO = await fetchGeolocation();
-		setCountry(GEO.country ? GEO.country : null);
-		setTimeZone(GEO.timezone ? GEO.timezone : null);
-		if (LANG_ON) {
-			setLang(
-				user?.language_code ? languages[user.language_code][LANG_DISPLAY] : null
-			);
+		if (GEO !== null) {
+			setCountry(GEO.country ? GEO.country : null);
+			setTimeZone(GEO.timezone ? GEO.timezone : null);
+			if (LANG_ON) {
+				setLang(
+					user?.language_code ? languages[user.language_code][LANG_DISPLAY] : null
+				);
+			}
 		}
 	};
 
