@@ -12,6 +12,7 @@
     "@vvo/tzdb": "^6.61.0",
     "countries-list": "^2.6.1",
     "daisyui": "^2.24.0",
+    "dist-upload-s3": "^1.1.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
