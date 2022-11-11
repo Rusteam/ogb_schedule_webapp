@@ -137,7 +137,7 @@ function App() {
 	}
 
 	return (
-		<div className="artboard phone-1 cnt-text">
+		<div className="artboard cnt-text" style={{width: "320px"}}>
 			<h2>Hello, {user ? user.first_name : "user"}!</h2>
 			<h3 className="text-xl">Set your training schedule</h3>
 			<div className="divider"></div>
