@@ -9,7 +9,8 @@ import {
 	LANGS,
 	TIME_LIST,
 	TIME_ZONES,
-	WEBHOOK_URL,
+	WEBHOOK_SUBMIT,
+	WEBHOOK_OPEN,
 	TG_MAIN_BUTTON,
 	LANG_ON
 } from "./config.jsx";
@@ -22,11 +23,28 @@ function filterTimeZones(countryCode) {
 	return zones.length > 0 ? zones : TIME_ZONES;
 }
 
+async function sendAppOpen(user) {
+	let payload = JSON.stringify({
+		platform: "tg",
+		users: [user.id.toString()]
+	});
+	let resp = await fetch(WEBHOOK_OPEN, {
+		method: "POST",
+		body: payload,
+		headers: {
+			"Content-type": "application/json"
+		}
+	})
+		.then(resp => resp.json())
+		.catch((error) => console.log(error))
+	console.log(resp);
+}
+
 function App() {
 	const tg = window.Telegram.WebApp;
 	const user = tg.initDataUnsafe.user ?? {
 		language_code: "en",
-		id: "all",
+		id: "1234",
 		first_name: "John Doe",
 	};
 	tg.expand();
@@ -54,6 +72,10 @@ function App() {
 
 	useEffect(() => {
 		handleGeoChange();
+	}, []);
+
+	useEffect(() => {
+		sendAppOpen(user);
 	}, []);
 
 	useEffect(() => {
@@ -89,7 +111,7 @@ function App() {
 		});
 		console.log({ payload });
 
-		const resp = await fetch(WEBHOOK_URL, {
+		const resp = await fetch(WEBHOOK_SUBMIT, {
 			method: "POST",
 			body: payload,
 			headers: {

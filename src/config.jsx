@@ -2,7 +2,8 @@ import {extractValues} from "./utils.jsx";
 import {countries, languages} from "countries-list";
 import {getTimeZones} from "@vvo/tzdb";
 
-export const WEBHOOK_URL = "https://functions.yandexcloud.net/d4ecji0mcnh76oq29hs3";
+export const WEBHOOK_SUBMIT = "https://functions.yandexcloud.net/d4ecji0mcnh76oq29hs3";
+export const WEBHOOK_OPEN = "https://functions.yandexcloud.net/d4eqg1jqqehcbb5klneu";
 export const DAYS_OF_WEEK = [
     "Monday",
     "Tuesday",
