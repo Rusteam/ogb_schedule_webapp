@@ -9,8 +9,6 @@ import {
 	LANGS,
 	TIME_LIST,
 	TIME_ZONES,
-	WEBHOOK_SUBMIT,
-	WEBHOOK_OPEN,
 	TG_MAIN_BUTTON,
 	LANG_ON
 } from "./config.jsx";
@@ -28,7 +26,7 @@ async function sendAppOpen(user) {
 		platform: "tg",
 		users: [user.id.toString()]
 	});
-	let resp = await fetch(WEBHOOK_OPEN, {
+	let resp = await fetch(import.meta.env.VITE_WEBHOOK_OPEN, {
 		method: "POST",
 		body: payload,
 		headers: {
@@ -111,7 +109,7 @@ function App() {
 		});
 		console.log({ payload });
 
-		const resp = await fetch(WEBHOOK_SUBMIT, {
+		const resp = await fetch(import.meta.env.VITE_WEBHOOK_SAVE, {
 			method: "POST",
 			body: payload,
 			headers: {
