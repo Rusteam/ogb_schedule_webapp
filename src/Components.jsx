@@ -62,7 +62,7 @@ const TimeOfDay = (props) => {
 				className={`btn-space btn btn-sm ${activeClass}`}
 				onClick={toggleButton}
 			>
-				{time}
+				{time.length === 5 ? time : "0" + time}
 			</button>
 		</span>
 	);
