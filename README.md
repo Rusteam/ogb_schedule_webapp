@@ -41,4 +41,5 @@ This project consists of three components:
 send a post request to a webhook.
 2. Python telegram bot app for testing the WebApp locally.
 3. Python cloud function to relay requests from the WebApp to a BotMother webhook 
-(it is used to bypass browser CORS restrictions).
+(it is used to bypass browser CORS restrictions). Two identical functions with different 
+environment variables are used. 

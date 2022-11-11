@@ -9,7 +9,6 @@ import {
 	LANGS,
 	TIME_LIST,
 	TIME_ZONES,
-	WEBHOOK_URL,
 	TG_MAIN_BUTTON,
 	LANG_ON
 } from "./config.jsx";
@@ -22,11 +21,28 @@ function filterTimeZones(countryCode) {
 	return zones.length > 0 ? zones : TIME_ZONES;
 }
 
+async function sendAppOpen(user) {
+	let payload = JSON.stringify({
+		platform: "tg",
+		users: [user.id.toString()]
+	});
+	let resp = await fetch(import.meta.env.VITE_WEBHOOK_OPEN, {
+		method: "POST",
+		body: payload,
+		headers: {
+			"Content-type": "application/json"
+		}
+	})
+		.then(resp => resp.json())
+		.catch((error) => console.log(error))
+	console.log(resp);
+}
+
 function App() {
 	const tg = window.Telegram.WebApp;
 	const user = tg.initDataUnsafe.user ?? {
 		language_code: "en",
-		id: "all",
+		id: "1234",
 		first_name: "John Doe",
 	};
 	tg.expand();
@@ -54,6 +70,10 @@ function App() {
 
 	useEffect(() => {
 		handleGeoChange();
+	}, []);
+
+	useEffect(() => {
+		sendAppOpen(user);
 	}, []);
 
 	useEffect(() => {
@@ -89,7 +109,7 @@ function App() {
 		});
 		console.log({ payload });
 
-		const resp = await fetch(WEBHOOK_URL, {
+		const resp = await fetch(import.meta.env.VITE_WEBHOOK_SAVE, {
 			method: "POST",
 			body: payload,
 			headers: {
@@ -115,7 +135,7 @@ function App() {
 	}
 
 	return (
-		<div className="artboard phone-1 cnt-text">
+		<div className="artboard cnt-text" style={{width: "320px"}}>
 			<h2>Hello, {user ? user.first_name : "user"}!</h2>
 			<h3 className="text-xl">Set your training schedule</h3>
 			<div className="divider"></div>
