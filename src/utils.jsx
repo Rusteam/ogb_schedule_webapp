@@ -59,17 +59,13 @@ export function findByName(array, key, value) {
     return filtered.length > 0 ? filtered[0] : null;
 }
 
-export function toDaysObject(total, curVal) {
-    let [name, isSelected] = curVal;
-    if (isSelected) {
-        name = name.toLowerCase().substring(0, 3);
-        return {
-            [name]: "V",
-            ...total,
-        };
-    } else {
-        return total
-    }
+export function toDaysObject(total, name) {
+    name = name.toLowerCase().substring(0, 3);
+    return {
+        [name]: "V",
+        ...total,
+    };
+
 }
 
 export function toTimeObject(total, curVal) {

@@ -1,17 +1,27 @@
 import {getDisplayOptions} from "./utils.jsx";
+import {DAYS_OF_WEEK} from "./config.jsx";
 
 export function DayOfWeek(props) {
     let style = {
         marginBottom: "1px",
     };
-    let outlineClass = props.isSelected ? "btn-accent" : "btn-ghost";
+	let isSelected = props.selectedItems.indexOf(props.name) !== -1;
+    let outlineClass = isSelected ? "btn-accent" : "btn-ghost";
 
     const toggleButton = () => {
-        let val = !props.isSelected;
-        props.updateSelected(val);
+		isSelected = props.selectedItems.indexOf(props.name) !== -1;
+
+		if (isSelected) {
+			let index = props.selectedItems.indexOf(props.name);
+			let newItems = [...props.selectedItems];
+			newItems.splice(index, 1);
+			props.updateSelected(newItems);
+		} else {
+			props.updateSelected(props.selectedItems.concat(props.name));
+		}
     };
 
-    let name =
+    let displayName =
         props.name.substring(0, 1).toUpperCase() +
         props.name.substring(1, 2).toLowerCase();
 
@@ -22,30 +32,30 @@ export function DayOfWeek(props) {
                 style={style}
                 onClick={toggleButton}
             >
-                {name}
+                {displayName}
             </button>
         </div>
     );
 }
 
 export const Week = (props) => {
-	const renderDay = (time) => {
-		let [name, isSelected, updateSelected] = time;
+	const renderDay = (day) => {
 		return (
 			<DayOfWeek
-				name={name}
-				isSelected={isSelected}
-				updateSelected={updateSelected}
+				name={day}
+				selectedItems={props.selectedDays}
+				updateSelected={props.updateDays}
 			></DayOfWeek>
 		);
 	};
 
 	return (
 		<div>
-			<div className="one-line">{props.days.map(renderDay)}</div>
+			<div className="one-line">{DAYS_OF_WEEK.map(renderDay)}</div>
 		</div>
 	);
 };
+
 const TimeOfDay = (props) => {
 	const [time, isSelected, updateSelected] = props.time;
 

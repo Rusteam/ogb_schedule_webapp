@@ -49,7 +49,8 @@ function App() {
 
 	// set hooks
 	const timeList = genListHooks(TIME_LIST);
-	const dayList = genListHooks(DAYS_OF_WEEK);
+	// const dayList = genListHooks(DAYS_OF_WEEK);
+	const [dayList, updateDayList] = useState([]);
 	const [country, setCountry] = useState("");
 	const [timeZone, setTimeZone] = useState("");
 	const [lang, setLang] = useState("");
@@ -139,7 +140,7 @@ function App() {
 			<h2>Hello, {user ? user.first_name : "user"}!</h2>
 			<h3 className="text-xl">Set your training schedule</h3>
 			<div className="divider"></div>
-			<Week days={dayList}></Week>
+			<Week selectedDays={dayList} updateDays={updateDayList}></Week>
 			<div className="divider"></div>
 			<TimeList timeList={timeList}></TimeList>
 			<div className="divider"></div>
