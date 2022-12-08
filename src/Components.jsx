@@ -1,81 +1,84 @@
 import {getDisplayOptions} from "./utils.jsx";
+import {DAYS_OF_WEEK, TIME_LIST} from "./config.jsx";
 
-export function DayOfWeek(props) {
-    let style = {
-        marginBottom: "1px",
-    };
-    let outlineClass = props.isSelected ? "btn-accent" : "btn-ghost";
+export function ListItem(props) {
+	let isSelected = props.selectedItems.indexOf(props.name) !== -1;
+    let outlineClass = isSelected ? props.highlight : "btn-ghost";
 
     const toggleButton = () => {
-        let val = !props.isSelected;
-        props.updateSelected(val);
-    };
+		isSelected = props.selectedItems.indexOf(props.name) !== -1;
 
-    let name =
-        props.name.substring(0, 1).toUpperCase() +
-        props.name.substring(1, 2).toLowerCase();
+		if (isSelected) {
+			let index = props.selectedItems.indexOf(props.name);
+			let newItems = [...props.selectedItems];
+			newItems.splice(index, 1);
+			props.updateSelected(newItems);
+		} else {
+			props.updateSelected(props.selectedItems.concat(props.name));
+		}
+    };
 
     return (
         <div id={`week-${props.name}`}>
             <button
-                className={`btn btn-sm btn-circle btn-active ${outlineClass}`}
-                style={style}
+                className={`${props.display} ${outlineClass}`}
+                style={props.style}
                 onClick={toggleButton}
             >
-                {name}
+                {props.displayName}
             </button>
         </div>
     );
 }
 
 export const Week = (props) => {
-	const renderDay = (time) => {
-		let [name, isSelected, updateSelected] = time;
+	let itemStyle = {
+        marginBottom: "1px",
+    };
+
+	const renderDay = (day) => {
+		let displayName = day.substring(0, 1).toUpperCase() +
+			 			  day.substring(1, 2).toLowerCase();
 		return (
-			<DayOfWeek
-				name={name}
-				isSelected={isSelected}
-				updateSelected={updateSelected}
-			></DayOfWeek>
+			<ListItem
+				name={day}
+				selectedItems={props.selectedDays}
+				updateSelected={props.updateDays}
+				displayName={displayName}
+				display="btn btn-sm btn-circle btn-active"
+				highlight="btn-accent"
+				style={itemStyle}
+			></ListItem>
 		);
 	};
 
 	return (
 		<div>
-			<div className="one-line">{props.days.map(renderDay)}</div>
+			<div className="one-line">{DAYS_OF_WEEK.map(renderDay)}</div>
 		</div>
 	);
 };
-const TimeOfDay = (props) => {
-	const [time, isSelected, updateSelected] = props.time;
 
-	const toggleButton = () => {
-		let val = !isSelected;
-		updateSelected(val);
-	};
-
-	const activeClass = isSelected ? "btn-primary" : "btn-ghost";
-
-	return (
-		<span id={`time-${time}`}>
-			<button
-				className={`btn-space btn btn-sm ${activeClass}`}
-				onClick={toggleButton}
-			>
-				{time.length === 5 ? time : "0" + time}
-			</button>
-		</span>
-	);
-};
 export const TimeList = (props) => {
 
 	function showTime(time) {
-		return <TimeOfDay time={time}></TimeOfDay>;
+		let displayName = time.length === 5 ? time : "0" + time;
+		return (
+			<ListItem
+				name={time}
+				selectedItems={props.selectedTimes}
+				updateSelected={props.updateTimes}
+				displayName={displayName}
+				display="btn btn-sm btn-space"
+				highlight="btn-primary"
+				style={{}}
+			></ListItem>
+		);
 	}
 
 	return (
 		<div className="time-list">
-			{props.timeList.map(showTime)}
+			{TIME_LIST.map(showTime)}
 		</div>
 	);
 };

@@ -1,42 +1,18 @@
 import {useEffect, useState} from "react";
 import "./App.css";
 import {languages} from "countries-list";
-import {fetchGeolocation, findByName, genListHooks, toDaysObject, toTimeObject} from "./utils.jsx";
 import {
-	COUNTRIES,
-	DAYS_OF_WEEK,
-	LANG_DISPLAY,
-	LANGS,
-	TIME_LIST,
-	TIME_ZONES,
-	TG_MAIN_BUTTON,
-	LANG_ON
-} from "./config.jsx";
+	fetchGeolocation,
+	filterTimeZones,
+	findByName,
+	parseUrlDays,
+	parseUrlTimes,
+	sendAppOpen,
+	toDaysObject,
+	toTimeObject
+} from "./utils.jsx";
+import {COUNTRIES, LANG_DISPLAY, LANG_ON, LANGS, TG_MAIN_BUTTON, TIME_ZONES} from "./config.jsx";
 import {DropdownSelect, MainDuplicate, TimeList, Week} from "./Components.jsx";
-
-function filterTimeZones(countryCode) {
-	const zones = TIME_ZONES.filter((x) => {
-		return x.countryName === countryCode;
-	});
-	return zones.length > 0 ? zones : TIME_ZONES;
-}
-
-async function sendAppOpen(user) {
-	let payload = JSON.stringify({
-		platform: "tg",
-		users: [user.id.toString()]
-	});
-	let resp = await fetch(import.meta.env.VITE_WEBHOOK_OPEN, {
-		method: "POST",
-		body: payload,
-		headers: {
-			"Content-type": "application/json"
-		}
-	})
-		.then(resp => resp.json())
-		.catch((error) => console.log(error))
-	console.log(resp);
-}
 
 function App() {
 	const tg = window.Telegram.WebApp;
@@ -47,9 +23,15 @@ function App() {
 	};
 	tg.expand();
 
+	// read url params if passed
+	const searchParams = new URLSearchParams(window.location.search);
+	let urlDays = parseUrlDays(searchParams.get("days") ?? "");
+	let urlTimes = parseUrlTimes(searchParams.get("time") ?? "");
+	console.log(urlDays, urlTimes);
+
 	// set hooks
-	const timeList = genListHooks(TIME_LIST);
-	const dayList = genListHooks(DAYS_OF_WEEK);
+	const [dayList, updateDayList] = useState(urlDays);
+	const [timeList, updateTimeList] = useState(urlTimes);
 	const [country, setCountry] = useState("");
 	const [timeZone, setTimeZone] = useState("");
 	const [lang, setLang] = useState("");
@@ -139,9 +121,9 @@ function App() {
 			<h2>Hello, {user ? user.first_name : "user"}!</h2>
 			<h3 className="text-xl">Set your training schedule</h3>
 			<div className="divider"></div>
-			<Week days={dayList}></Week>
+			<Week selectedDays={dayList} updateDays={updateDayList}></Week>
 			<div className="divider"></div>
-			<TimeList timeList={timeList}></TimeList>
+			<TimeList selectedTimes={timeList} updateTimes={updateTimeList}></TimeList>
 			<div className="divider"></div>
 			<div>
 				<h5 className="text-base-content">Location settings:</h5>
