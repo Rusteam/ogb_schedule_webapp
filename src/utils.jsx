@@ -37,20 +37,6 @@ export function getDisplayOptions(array, key) {
     return array.map((x) => x[key]);
 }
 
-export function genListHooks(array) {
-    let timeList = [];
-    for (let i = 0; i < array.length; i++) {
-        let [one, updateOne] = useState(false);
-        timeList.push([array[i], one, updateOne]);
-    }
-    return timeList;
-}
-
-export function sumListHooks(total, hookElem) {
-    // find a number of 'true' states
-    return total + hookElem[1];
-}
-
 export function findByName(array, key, value) {
     // find array element with key=value
     const filtered = array.filter((x) => {
@@ -69,14 +55,9 @@ export function toDaysObject(total, name) {
 }
 
 export function toTimeObject(total, curVal) {
-    let [name, isSelected] = curVal;
-    if (isSelected) {
-        let key = name.replace(":", "");
-        return {
-            [key]: name,
-            ...total,
-        };
-    } else {
-        return total
-    }
+    let key = curVal.replace(":", "");
+    return {
+        [key]: curVal,
+        ...total,
+    };
 }

@@ -1,13 +1,11 @@
 import {useEffect, useState} from "react";
 import "./App.css";
 import {languages} from "countries-list";
-import {fetchGeolocation, findByName, genListHooks, toDaysObject, toTimeObject} from "./utils.jsx";
+import {fetchGeolocation, findByName, toDaysObject, toTimeObject} from "./utils.jsx";
 import {
 	COUNTRIES,
-	DAYS_OF_WEEK,
 	LANG_DISPLAY,
 	LANGS,
-	TIME_LIST,
 	TIME_ZONES,
 	TG_MAIN_BUTTON,
 	LANG_ON
@@ -48,9 +46,8 @@ function App() {
 	tg.expand();
 
 	// set hooks
-	const timeList = genListHooks(TIME_LIST);
-	// const dayList = genListHooks(DAYS_OF_WEEK);
 	const [dayList, updateDayList] = useState([]);
+	const [timeList, updateTimeList] = useState([]);
 	const [country, setCountry] = useState("");
 	const [timeZone, setTimeZone] = useState("");
 	const [lang, setLang] = useState("");
@@ -142,7 +139,7 @@ function App() {
 			<div className="divider"></div>
 			<Week selectedDays={dayList} updateDays={updateDayList}></Week>
 			<div className="divider"></div>
-			<TimeList timeList={timeList}></TimeList>
+			<TimeList selectedTimes={timeList} updateTimes={updateTimeList}></TimeList>
 			<div className="divider"></div>
 			<div>
 				<h5 className="text-base-content">Location settings:</h5>
