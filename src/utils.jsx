@@ -1,5 +1,4 @@
-import {useState} from "react";
-import {TIME_ZONES} from "./config.jsx";
+import {DAYS_OF_WEEK, TIME_ZONES} from "./config.jsx";
 
 export function extractValues(data) {
     let valList = [];
@@ -60,4 +59,46 @@ export function toTimeObject(total, curVal) {
         [key]: curVal,
         ...total,
     };
+}
+
+export function filterTimeZones(countryCode) {
+    const zones = TIME_ZONES.filter((x) => {
+        return x.countryName === countryCode;
+    });
+    return zones.length > 0 ? zones : TIME_ZONES;
+}
+
+export async function sendAppOpen(user) {
+    let payload = JSON.stringify({
+        platform: "tg",
+        users: [user.id.toString()]
+    });
+    let resp = await fetch(import.meta.env.VITE_WEBHOOK_OPEN, {
+        method: "POST",
+        body: payload,
+        headers: {
+            "Content-type": "application/json"
+        }
+    })
+        .then(resp => resp.json())
+        .catch((error) => console.log(error))
+    console.log(resp);
+}
+
+export function parseUrlDays(days) {
+    let selected = days.split(",").filter((x) => x.trim() !== "");
+    if (selected.length > 0) {
+        let daysOfWeek = DAYS_OF_WEEK.map((x) => x.toLowerCase().substring(0, 3));
+        selected = selected.map((x) => {
+            let index = daysOfWeek.indexOf(x);
+            return index !== -1 ? DAYS_OF_WEEK[index] : null;
+        });
+        return selected;
+    } else {
+        return [];
+    }
+}
+
+export function parseUrlTimes(times) {
+    return times.split(",").filter((x) => x.trim() !== "");
 }
