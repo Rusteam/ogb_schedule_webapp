@@ -119,14 +119,14 @@ function App() {
 	return (
 		<div className="artboard cnt-text" style={{width: "320px"}}>
 			<h2>Hello, {user ? user.first_name : "user"}!</h2>
-			<h3 className="text-xl">Set your training schedule</h3>
+			<h3 className="text-xl">Set time and days of week for reminders</h3>
 			<div className="divider"></div>
 			<Week selectedDays={dayList} updateDays={updateDayList}></Week>
 			<div className="divider"></div>
 			<TimeList selectedTimes={timeList} updateTimes={updateTimeList}></TimeList>
 			<div className="divider"></div>
 			<div>
-				<h5 className="text-base-content">Location settings:</h5>
+				<h5 className="text-base-content">Location and time zone:</h5>
 				<DropdownSelect
 					name="country"
 					values={COUNTRIES}
