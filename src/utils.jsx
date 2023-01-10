@@ -27,7 +27,8 @@ export async function fetchGeolocation() {
         }
         return {
             "country": geo.country_name,
-            "timezone": timezone
+            "timezone": timezone,
+            "city": geo.city
         }
     }
 }

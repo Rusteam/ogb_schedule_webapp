@@ -33,6 +33,7 @@ function App() {
 	const [dayList, updateDayList] = useState(urlDays);
 	const [timeList, updateTimeList] = useState(urlTimes);
 	const [country, setCountry] = useState("");
+	const [city, setCity] = useState("");
 	const [timeZone, setTimeZone] = useState("");
 	const [lang, setLang] = useState("");
 	let zones = filterTimeZones(country);
@@ -41,6 +42,7 @@ function App() {
 		const GEO = await fetchGeolocation();
 		if (GEO !== null) {
 			setCountry(GEO.country ? GEO.country : null);
+			setCity(GEO.city ? GEO.city : null);
 			setTimeZone(GEO.timezone ? GEO.timezone : null);
 			if (LANG_ON) {
 				setLang(
@@ -76,6 +78,7 @@ function App() {
 		timeOffset = timeOffset === null ? null : (timeOffset >= 0 ? `+${timeOffset}` : timeOffset.toString());
 		let data = {
 			country: country,
+			city: city,
 			timezone: timeOffset,
 			...selectedDays,
 			...selectedTime,
