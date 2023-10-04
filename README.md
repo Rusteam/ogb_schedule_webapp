@@ -1,13 +1,29 @@
-# OfficeGymBot Scheduler WebApp
-Set a schedule from a Telegram WebApp for @OfficeGymBot.
+# 📆 Telegram Scheduler WebApp 
+
+![][mit-badge] * ![][tg-ogb-badge] * ![][web-ogb-badge] * ![][used-badge]
+
+
+[mit-badge]: https://img.shields.io/badge/license-MIT-lightgreen
+[tg-ogb-badge]: https://img.shields.io/badge/try-telegram-blue?logo=telegram&logoColor=white&link=https%3A%2F%2Ft.me%2Fofficegymbot
+[web-ogb-badge]: https://img.shields.io/badge/try-web-yellow?logoColor=white&link=https%3A%2F%2Foffice-gym-bot.website.yandexcloud.net%2F
+[used-badge]: https://img.shields.io/badge/activated-%3E%203k%20times-green?logo=telegram&logoColor=white
+
+---
+
+Set a fitness schedule from a Telegram WebApp for [@OfficeGymBot](https://t.me/officegymbot).
+
+## 📱 Features 
+- set training days of week and time 💪
+- auto timezone detection 🗺️
+- dark and light modes 🚥
 
 ## Usage
 
-**Pre-reqs:**
-- npm
-- ngrok
-- python
-- aws cli
+### Prerequisites
+- [build] npm
+- [test] ngrok
+- [test] python3.9
+- [deployment] aws cli
 
 ### Install and run
 ```shell
