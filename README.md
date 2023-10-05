@@ -1,16 +1,19 @@
 # 📆 Telegram Scheduler WebApp 
 
-![][mit-badge] * ![][tg-ogb-badge] * ![][web-ogb-badge] * ![][used-badge]
+Set a fitness schedule from a Telegram WebApp for [@OfficeGymBot](https://t.me/officegymbot).
 
+--- 
+
+![][mit-badge] * [![][tg-ogb-badge]][tg-ogb-link] * [![][web-ogb-badge]][web-ogb-link] * ![][used-badge]
 
 [mit-badge]: https://img.shields.io/badge/license-MIT-lightgreen
-[tg-ogb-badge]: https://img.shields.io/badge/try-telegram-blue?logo=telegram&logoColor=white&link=https%3A%2F%2Ft.me%2Fofficegymbot
-[web-ogb-badge]: https://img.shields.io/badge/try-web-yellow?logoColor=white&link=https%3A%2F%2Foffice-gym-bot.website.yandexcloud.net%2F
+[tg-ogb-badge]: https://img.shields.io/badge/try-telegram-blue?logo=telegram&logoColor=white
+[tg-ogb-link]: https://t.me/officegymbot
+[web-ogb-badge]: https://img.shields.io/badge/try-web-yellow?logoColor=white
+[web-ogb-link]: https://office-gym-bot.website.yandexcloud.net
 [used-badge]: https://img.shields.io/badge/activated-%3E%203k%20times-green?logo=telegram&logoColor=white
 
 ---
-
-Set a fitness schedule from a Telegram WebApp for [@OfficeGymBot](https://t.me/officegymbot).
 
 ## 📱 Features 
 - set training days of week and time 💪
