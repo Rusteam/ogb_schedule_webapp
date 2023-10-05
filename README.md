@@ -21,51 +21,47 @@ Set a fitness schedule from a Telegram WebApp for [@OfficeGymBot][tg-ogb-link].
 - set training days of week and time 💪
 - auto timezone detection 🗺️
 - dark and light modes 🚥
+- python bot to test the integration 🤖
+- automated S3 deployment 🚀
 
 <div align="center">
   <img src="./public/ogb_dark.png" alt="dark theme" width="300"/>
   <img src="./public/ogb_light.png" alt="light theme" width="300"/>
 </div>
 
-## Usage
+## ⌨️ Usage
 
-### Prerequisites
+### Prereqs
 - [build] npm
-- [test] ngrok
-- [test] python3.9
-- [deployment] aws cli
+- [test] ngrok, python3.9
+- [deployment] aws cli and credentials
 
 ### Install and run
 ```shell
 make dev
 make run
 ```
-Review the app on [localhost](http://localhost:5173)
+Review the app on [localhost](http://localhost:5173).
+Try to set a schedule and check the logs in the console.
+Selected days and time will be sent to a webhook upon clicking the "SAVE" button.
+When using from Telegram, clicking on the "SAVE" button also closes the window.
 
-### Open from Telegram bot
+### Telegram bot
 
-1. Run a test bot: `make bot`
+In order to test the app from Telegram, you need to 
+run a bot locally and expose the app to the Internet.
+
+1. Create a telegram from [BotFather](https://t.me/botfather) and get a token.
 2. Run a ngrok to expose the app on https: `make ngrok`
+3. Run a test bot: `make bot` and enter required credentials and links.
 
 ### Build dist
 
-Build a static website for distribution:
-```shell
-make build
-```
+Build a static website for distribution: ``make build``.
+
+The app contents will be saved to the `./dist` folder and can be uploaded to any static file server.
 
 ### Deploy to S3
 
 1. Create `.env` file with `AWS_*` credentials as in `.env.example`.
 2. Upload dist files to S3: `make s3`
-
-
-## Project structure
-
-This project consists of three components:
-1. Main javascript WebApp to set a traininf schedule and 
-send a post request to a webhook.
-2. Python telegram bot app for testing the WebApp locally.
-3. Python cloud function to relay requests from the WebApp to a BotMother webhook 
-(it is used to bypass browser CORS restrictions). Two identical functions with different 
-environment variables are used. 

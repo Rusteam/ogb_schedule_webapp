@@ -1,4 +1,16 @@
-.PHONY = build
+.PHONY = run
+
+run: dev
+	npm run dev
+
+dev:
+	npm install
+
+ngrok:
+	ngrok http 5173
+
+bot:
+	python bot.py
 
 build:
 	npm run build
@@ -12,15 +24,3 @@ s3: build
 	    --recursive dist/ \
 	    s3://${AWS_BUCKET_NAME} \
 		--exclude ".DS_Store"
-
-run: dev
-	npm run dev
-
-dev:
-	npm install
-
-ngrok:
-	ngrok http 5173
-
-bot:
-	python main.py

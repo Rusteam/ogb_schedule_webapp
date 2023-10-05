@@ -6,23 +6,19 @@ import dotenv
 
 
 dotenv.load_dotenv(".env")
-bot = telebot.TeleBot(os.environ.get("TELEGRAM_BOT_TOKEN", input("enter telegram token: ")))
-prod_link = os.environ.get("OGB_PROD_LINK", input("enter prod link: "))
-dev_link = os.environ.get("OGB_DEV_LINK", input("enter dev link: "))
+bot = telebot.TeleBot(
+    os.environ.get("TELEGRAM_BOT_TOKEN", input("Enter Telegram bot token: "))
+)
+prod_link = os.environ.get("OGB_PROD_LINK", input("Enter url of deployed version (if available): "))
+dev_link = os.environ.get("OGB_DEV_LINK", input("Enter url of development version (ngrok link): "))
 
 
 def inline_keyboard():
     keyboard = types.InlineKeyboardMarkup()
     webAppTest = types.WebAppInfo(prod_link)
-    webAppGame = types.WebAppInfo(
-        dev_link
-    )
-    one_butt = types.InlineKeyboardButton(
-        text="Production", web_app=webAppTest
-    )
-    two_butt = types.InlineKeyboardButton(
-        text="Development", web_app=webAppGame
-    )
+    webAppGame = types.WebAppInfo(dev_link)
+    one_butt = types.InlineKeyboardButton(text="Production", web_app=webAppTest)
+    two_butt = types.InlineKeyboardButton(text="Development", web_app=webAppGame)
     keyboard.add(
         one_butt,
         two_butt,
@@ -35,12 +31,8 @@ def keyboard():
     keyboard = types.ReplyKeyboardMarkup(row_width=1)
     webAppTest = types.WebAppInfo(prod_link)
     webAppGame = types.WebAppInfo(dev_link)
-    one_butt = types.KeyboardButton(
-        text="Production", web_app=webAppTest
-    )
-    two_butt = types.KeyboardButton(
-        text="Development", web_app=webAppGame
-    )
+    one_butt = types.KeyboardButton(text="Production", web_app=webAppTest)
+    two_butt = types.KeyboardButton(text="Development", web_app=webAppGame)
     keyboard.add(
         one_butt,
         two_butt,
@@ -61,14 +53,14 @@ def start_fun(message):
 
 @bot.message_handler(content_types="text")
 def new_mes(message):
-    bot.send_message(message.chat.id,
-                     "Open a web app by clicking a keyboard button",
-                     reply_markup=keyboard())
+    bot.send_message(
+        message.chat.id,
+        "Open a web app by clicking a keyboard button",
+        reply_markup=keyboard(),
+    )
 
 
-@bot.message_handler(
-    content_types="web_app_data"
-)
+@bot.message_handler(content_types="web_app_data")
 def answer(webAppMes):
     bot.send_message(
         webAppMes.chat.id,
