@@ -1,8 +1,8 @@
-import {extractValues} from "./utils.jsx";
+import {extractValues} from "./utils";
 import {countries, languages} from "countries-list";
 import {getTimeZones} from "@vvo/tzdb";
 
-export const DAYS_OF_WEEK = [
+export const DAYS_OF_WEEK: string[] = [
     "Monday",
     "Tuesday",
     "Wednesday",
@@ -11,7 +11,7 @@ export const DAYS_OF_WEEK = [
     "Saturday",
     "Sunday",
 ];
-export const TIME_LIST = [
+export const TIME_LIST: string[] = [
     "6:00",
     "6:30",
     "7:00",

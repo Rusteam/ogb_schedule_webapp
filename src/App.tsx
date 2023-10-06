@@ -1,6 +1,6 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
-import {languages} from "countries-list";
+import {  Language, languages } from "countries-list";
 import {
 	fetchGeolocation,
 	filterTimeZones,
@@ -9,14 +9,32 @@ import {
 	parseUrlTimes,
 	sendAppOpen,
 	toDaysObject,
-	toTimeObject
-} from "./utils.jsx";
-import {COUNTRIES, LANG_DISPLAY, LANG_ON, LANGS, TG_MAIN_BUTTON, TIME_ZONES} from "./config.jsx";
-import {DropdownSelect, MainDuplicate, TimeList, Week} from "./Components.jsx";
+	toTimeObject,
+} from "./utils"
+import {
+	COUNTRIES,
+	LANG_DISPLAY,
+	LANG_ON,
+	LANGS,
+	TG_MAIN_BUTTON,
+	TIME_ZONES,
+} from "./config";
+import { DropdownSelect, MainDuplicate, TimeList, Week } from "./components";
 
+declare global {
+  interface Window {
+    Telegram: {WebApp: any};
+  }
+}
+
+interface User{
+  language_code: string;
+  id: string;
+  first_name: string;
+}
 function App() {
 	const tg = window.Telegram.WebApp;
-	const user = tg.initDataUnsafe.user ?? {
+	const user:User = tg.initDataUnsafe.user ?? {
 		language_code: "en",
 		id: "1234",
 		first_name: "John Doe",
@@ -30,25 +48,27 @@ function App() {
 	console.log(urlDays, urlTimes);
 
 	// set hooks
-	const [dayList, updateDayList] = useState(urlDays);
-	const [timeList, updateTimeList] = useState(urlTimes);
-	const [country, setCountry] = useState("");
-	const [timeZone, setTimeZone] = useState("");
-	const [lang, setLang] = useState("");
+	const [dayList, updateDayList] = useState<string[]>(urlDays);
+	const [timeList, updateTimeList] = useState<string[]>(urlTimes);
+	const [country, setCountry] = useState<string>();
+	const [timeZone, setTimeZone] = useState<string>();
+	const [lang, setLang] = useState<string>();
 	let zones = filterTimeZones(country);
 
-	const handleGeoChange = async () => {
-		const GEO = await fetchGeolocation();
-		if (GEO !== null) {
-			setCountry(GEO.country ? GEO.country : null);
-			setTimeZone(GEO.timezone ? GEO.timezone : null);
-			if (LANG_ON) {
-				setLang(
-					user?.language_code ? languages[user.language_code][LANG_DISPLAY] : null
-				);
-			}
-		}
-	};
+const handleGeoChange = async () => {
+  const GEO = await fetchGeolocation();
+  if (GEO) {
+    setCountry(GEO.country ? GEO.country : undefined);
+    GEO.timezone && setTimeZone(GEO.timezone);
+    if (LANG_ON) {
+      setLang(
+        user?.language_code
+          ? (languages as {[key: string]: Language})[user.language_code][LANG_DISPLAY]
+          : undefined
+      );
+    }
+  }
+};
 
 	useEffect(() => {
 		handleGeoChange();
@@ -71,9 +91,20 @@ function App() {
 
 		let selectedTime = timeList.reduce(toTimeObject, {});
 		let timeOffset = timeZone
-			? Math.round(findByName(TIME_ZONES, "name", timeZone)?.rawOffsetInMinutes / 60)
+			? Math.round(
+					findByName(TIME_ZONES, "name", timeZone)?.rawOffsetInMinutes / 60
+			  )
 			: null;
-		timeOffset = timeOffset === null ? null : (timeOffset >= 0 ? `+${timeOffset}` : timeOffset.toString());
+timeOffset = timeZone
+  ? Math.round(
+      findByName(TIME_ZONES, "name", timeZone)?.rawOffsetInMinutes / 60
+    )
+  : null;
+			timeOffset === null
+				? null
+				: timeOffset >= 0
+				? `+${timeOffset}`
+				: timeOffset.toString();
 		let data = {
 			country: country,
 			timezone: timeOffset,
@@ -81,7 +112,9 @@ function App() {
 			...selectedTime,
 		};
 		if (LANG_ON) {
-			data["language"] = lang ? findByName(LANGS, LANG_DISPLAY, lang)?.code : null;
+			data["language"] = lang
+				? findByName(LANGS, LANG_DISPLAY, lang)?.code
+				: null;
 		}
 
 		const payload = JSON.stringify({
@@ -95,8 +128,8 @@ function App() {
 			method: "POST",
 			body: payload,
 			headers: {
-				"Content-type": "application/json"
-			}
+				"Content-type": "application/json",
+			},
 		});
 
 		tg.close();
@@ -117,13 +150,16 @@ function App() {
 	}
 
 	return (
-		<div className="artboard cnt-text" style={{width: "320px"}}>
+		<div className="artboard cnt-text" style={{ width: "320px" }}>
 			<h2>Hello, {user ? user.first_name : "user"}!</h2>
 			<h3 className="text-xl">Set your training schedule</h3>
 			<div className="divider"></div>
 			<Week selectedDays={dayList} updateDays={updateDayList}></Week>
 			<div className="divider"></div>
-			<TimeList selectedTimes={timeList} updateTimes={updateTimeList}></TimeList>
+			<TimeList
+				selectedTimes={timeList}
+				updateTimes={updateTimeList}
+			></TimeList>
 			<div className="divider"></div>
 			<div>
 				<h5 className="text-base-content">Location settings:</h5>
@@ -141,13 +177,17 @@ function App() {
 					updateSelected={setTimeZone}
 					selected={timeZone}
 				></DropdownSelect>
-				{LANG_ON ? <DropdownSelect
-					name="language"
-					values={LANGS}
-					displayKey={LANG_DISPLAY}
-					updateSelected={setLang}
-					selected={lang}
-				></DropdownSelect> : <div></div>}
+				{LANG_ON ? (
+					<DropdownSelect
+						name="language"
+						values={LANGS}
+						displayKey={LANG_DISPLAY}
+						updateSelected={setLang}
+						selected={lang}
+					></DropdownSelect>
+				) : (
+					<div></div>
+				)}
 				<MainDuplicate
 					disabled={TG_MAIN_BUTTON}
 					submitData={submitData}
