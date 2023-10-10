@@ -51,9 +51,11 @@ When using from Telegram, clicking on the "SAVE" button also closes the window.
 In order to test the app from Telegram, you need to 
 run a bot locally and expose the app to the Internet.
 
-1. Create a telegram from [BotFather](https://t.me/botfather) and get a token.
-2. Run a ngrok to expose the app on https: `make ngrok`
-3. Run a test bot: `make bot` and enter required credentials and links.
+1. Install and activate python3.9 environment (conda or other).
+2. Install dependencies: `pip install -r requirements.txt`
+3. Create a telegram bot from [BotFather](https://t.me/botfather) and get a token.
+4. Start the app locally `make run` and launch **ngrok** to expose the app on https: `make ngrok`.
+5. Run a test bot: `make bot` and enter required credentials and links.
 
 ### Build dist
 
